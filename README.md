@@ -1,6 +1,6 @@
 # API Sistema de Ventas
 
-_API que gestiona CRUD de Clientes, Productos, Entradas y Ventas._
+_API con propósitos de DESARROLLO que gestiona CRUD de Clientes, Productos, Entradas y Ventas._
 
 ### Pre-requisitos 📋
 
@@ -29,3 +29,9 @@ const connectionString = {
 ```
 npm install
 ```
+
+## Construido con 🛠️
+
+* [Node.js](https://nodejs.org/es/)
+* [Express.js](https://expressjs.com/es/)
+* [PostgreSQL](https://www.postgresql.org/)
