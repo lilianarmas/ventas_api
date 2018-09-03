@@ -8,25 +8,6 @@ COMMENT ON TABLE clientes IS 'Clientes de la empresa';
 COMMENT ON COLUMN clientes.id_cliente IS 'Identificador único del cliente';
 COMMENT ON COLUMN clientes.nombre IS 'Nombre del cliente';
 
-
-CREATE TABLE entradas
-(
-  id_entrada integer NOT NULL DEFAULT nextval('entradas_inventario_id_entrada_seq'::regclass), -- Identificador único de la entrada
-  id_producto integer, -- Identificador único del producto del que se ha realizado la entrada
-  cantidad integer, -- Cantidad del producto que se está ingresando
-  fecha date DEFAULT now(), -- Fecha de realización de la entrada
-  CONSTRAINT entradas_inventario_pkey PRIMARY KEY (id_entrada),
-  CONSTRAINT entradas_id_producto_fkey FOREIGN KEY (id_producto)
-      REFERENCES productos (id_producto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-);
-COMMENT ON TABLE entradas IS 'Entrada de productos en el inventario de la empresa';
-COMMENT ON COLUMN entradas.id_entrada IS 'Identificador único de la entrada';
-COMMENT ON COLUMN entradas.id_producto IS 'Identificador único del producto del que se ha realizado la entrada';
-COMMENT ON COLUMN entradas.cantidad IS 'Cantidad del producto que se está ingresando';
-COMMENT ON COLUMN entradas.fecha IS 'Fecha de realización de la entrada';
-
-
 CREATE TABLE productos
 (
   id_producto serial NOT NULL, -- Identificador único del producto
@@ -40,6 +21,23 @@ COMMENT ON COLUMN productos.id_producto IS 'Identificador único del producto';
 COMMENT ON COLUMN productos.descripcion IS 'Descripción del producto';
 COMMENT ON COLUMN productos.precio IS 'Precio del producto';
 COMMENT ON COLUMN productos.existencia IS 'Cantidad actual en existencia del producto';
+
+CREATE TABLE entradas
+(
+  id_entrada serial NOT NULL, -- Identificador único de la entrada
+  id_producto integer, -- Identificador único del producto del que se ha realizado la entrada
+  cantidad integer, -- Cantidad del producto que se está ingresando
+  fecha date DEFAULT now(), -- Fecha de realización de la entrada
+  CONSTRAINT entradas_inventario_pkey PRIMARY KEY (id_entrada),
+  CONSTRAINT entradas_id_producto_fkey FOREIGN KEY (id_producto)
+      REFERENCES productos (id_producto) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+COMMENT ON TABLE entradas IS 'Entrada de productos en el inventario de la empresa';
+COMMENT ON COLUMN entradas.id_entrada IS 'Identificador único de la entrada';
+COMMENT ON COLUMN entradas.id_producto IS 'Identificador único del producto del que se ha realizado la entrada';
+COMMENT ON COLUMN entradas.cantidad IS 'Cantidad del producto que se está ingresando';
+COMMENT ON COLUMN entradas.fecha IS 'Fecha de realización de la entrada';
 
 CREATE TABLE ventas
 (
