@@ -1,81 +1,81 @@
-CREATE TABLE clientes
+CREATE TABLE clients
 (
-  id_cliente serial NOT NULL, -- Identificador único del cliente
-  nombre character varying(200), -- Nombre del cliente
-  CONSTRAINT clientes_pkey PRIMARY KEY (id_cliente)
+    client_id serial NOT NULL, -- Identificador único del cliente
+    name character varying(200), -- Nombre del cliente
+    CONSTRAINT clients_pkey PRIMARY KEY (client_id)
 );
-COMMENT ON TABLE clientes IS 'Clientes de la empresa';
-COMMENT ON COLUMN clientes.id_cliente IS 'Identificador único del cliente';
-COMMENT ON COLUMN clientes.nombre IS 'Nombre del cliente';
+COMMENT ON TABLE clients IS 'Clientes de la empresa';
+COMMENT ON COLUMN clients.client_id IS 'Identificador único del cliente';
+COMMENT ON COLUMN clients.name IS 'Nombre del cliente';
 
-CREATE TABLE productos
+CREATE TABLE products
 (
-  id_producto serial NOT NULL, -- Identificador único del producto
-  descripcion character varying(300) NOT NULL, -- Descripción del producto
-  precio double precision NOT NULL, -- Precio del producto
-  existencia bigint, -- Cantidad actual en existencia del producto
-  CONSTRAINT productos_pkey PRIMARY KEY (id_producto)
+    product_id serial NOT NULL, -- Identificador único del producto
+    description character varying(300) NOT NULL, -- Descripción del producto
+    price double precision NOT NULL, -- Precio del producto
+    quantity bigint, -- Cantidad actual en existencia del producto
+    CONSTRAINT products_pkey PRIMARY KEY (product_id)
 );
-COMMENT ON TABLE productos  IS 'Productos que vende la empresa';
-COMMENT ON COLUMN productos.id_producto IS 'Identificador único del producto';
-COMMENT ON COLUMN productos.descripcion IS 'Descripción del producto';
-COMMENT ON COLUMN productos.precio IS 'Precio del producto';
-COMMENT ON COLUMN productos.existencia IS 'Cantidad actual en existencia del producto';
+COMMENT ON TABLE products  IS 'Productos que vende la empresa';
+COMMENT ON COLUMN products.product_id IS 'Identificador único del producto';
+COMMENT ON COLUMN products.description IS 'Descripción del producto';
+COMMENT ON COLUMN products.price IS 'Precio del producto';
+COMMENT ON COLUMN products.quantity IS 'Cantidad actual en existencia del producto';
 
-CREATE TABLE entradas
+CREATE TABLE entries
 (
-  id_entrada serial NOT NULL, -- Identificador único de la entrada
-  id_producto integer, -- Identificador único del producto del que se ha realizado la entrada
-  cantidad integer, -- Cantidad del producto que se está ingresando
-  fecha date DEFAULT now(), -- Fecha de realización de la entrada
-  CONSTRAINT entradas_inventario_pkey PRIMARY KEY (id_entrada),
-  CONSTRAINT entradas_id_producto_fkey FOREIGN KEY (id_producto)
-      REFERENCES productos (id_producto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+    entry_id serial NOT NULL, -- Identificador único de la entrada
+    product_id integer, -- Identificador único del producto del que se ha realizado la entrada
+    quantity integer, -- Cantidad del producto que se está ingresando
+    date date DEFAULT now(), -- Fecha de realización de la entrada
+    CONSTRAINT entries_pkey PRIMARY KEY (entry_id),
+    CONSTRAINT entries_product_id_fkey FOREIGN KEY (product_id)
+        REFERENCES products (product_id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION
 );
-COMMENT ON TABLE entradas IS 'Entrada de productos en el inventario de la empresa';
-COMMENT ON COLUMN entradas.id_entrada IS 'Identificador único de la entrada';
-COMMENT ON COLUMN entradas.id_producto IS 'Identificador único del producto del que se ha realizado la entrada';
-COMMENT ON COLUMN entradas.cantidad IS 'Cantidad del producto que se está ingresando';
-COMMENT ON COLUMN entradas.fecha IS 'Fecha de realización de la entrada';
+COMMENT ON TABLE entries IS 'Entrada de productos en el inventario de la empresa';
+COMMENT ON COLUMN entries.entry_id IS 'Identificador único de la entrada';
+COMMENT ON COLUMN entries.product_id IS 'Identificador único del producto del que se ha realizado la entrada';
+COMMENT ON COLUMN entries.quantity IS 'Cantidad del producto que se está ingresando';
+COMMENT ON COLUMN entries.date IS 'Fecha de realización de la entrada';
 
-CREATE TABLE ventas
+CREATE TABLE sales
 (
-  id_venta serial NOT NULL, -- Identificador único de la venta
-  id_cliente integer NOT NULL, -- Identificador único del cliente al que se le realizó la venta
-  fecha date NOT NULL DEFAULT now(), -- Fecha de la venta
-  total_general double precision NOT NULL, -- Total general de la venta
-  CONSTRAINT ventas_pkey PRIMARY KEY (id_venta),
-  CONSTRAINT ventas_id_cliente_fkey FOREIGN KEY (id_cliente)
-      REFERENCES clientes (id_cliente) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+    sale_id serial NOT NULL, -- Identificador único de la venta
+    client_id integer NOT NULL, -- Identificador único del cliente al que se le realizó la venta
+    date date NOT NULL DEFAULT now(), -- Fecha de la venta
+    total double precision NOT NULL, -- Total general de la venta
+    CONSTRAINT sales_pkey PRIMARY KEY (sale_id),
+    CONSTRAINT sales_client_id_fkey FOREIGN KEY (client_id)
+            REFERENCES clients (client_id) MATCH SIMPLE
+            ON UPDATE NO ACTION ON DELETE NO ACTION
 );
-COMMENT ON TABLE ventas IS 'Ventas realizadas a los clientes';
-COMMENT ON COLUMN ventas.id_venta IS 'Identificador único de la venta';
-COMMENT ON COLUMN ventas.id_cliente IS 'Identificador único del cliente al que se le realizó la venta';
-COMMENT ON COLUMN ventas.fecha IS 'Fecha de la venta';
-COMMENT ON COLUMN ventas.total_general IS 'Total general de la venta';
+COMMENT ON TABLE sales IS 'Ventas realizadas a los clientes';
+COMMENT ON COLUMN sales.sale_id IS 'Identificador único de la venta';
+COMMENT ON COLUMN sales.client_id IS 'Identificador único del cliente al que se le realizó la venta';
+COMMENT ON COLUMN sales.date IS 'Fecha de la venta';
+COMMENT ON COLUMN sales.total IS 'Total general de la venta';
 
-CREATE TABLE ventas_detalle
+CREATE TABLE sales_detail
 (
-  id_venta integer NOT NULL, -- Identificador único de la venta
-  id_producto integer NOT NULL, -- Identificador único del producto que se ha vendido
-  renglon integer NOT NULL, -- Número de renglon de la venta
-  cantidad smallint NOT NULL, -- Cantidad del producto que se ha vendido
-  precio double precision NOT NULL, -- Precio al que se vendio el producto
-  total double precision NOT NULL, -- Total de monto por la venta de la cantidad especificada del producto
-  CONSTRAINT ventas_detalle_pkey PRIMARY KEY (id_venta, id_producto),
-  CONSTRAINT ventas_detalle_id_producto_fkey FOREIGN KEY (id_producto)
-      REFERENCES productos (id_producto) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT ventas_detalle_id_venta_fkey FOREIGN KEY (id_venta)
-      REFERENCES ventas (id_venta) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+    sale_id integer NOT NULL, -- Identificador único de la venta
+    product_id integer NOT NULL, -- Identificador único del producto que se ha vendido
+    item integer NOT NULL, -- Número de renglon de la venta
+    quantity smallint NOT NULL, -- Cantidad del producto que se ha vendido
+    price double precision NOT NULL, -- Precio al que se vendio el producto
+    total double precision NOT NULL, -- Total de monto por la venta de la cantidad especificada del producto
+    CONSTRAINT sales_detail_pkey PRIMARY KEY (sale_id, product_id),
+    CONSTRAINT sales_detail_product_id_fkey FOREIGN KEY (product_id)
+        REFERENCES products (product_id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+    CONSTRAINT sales_detail_sale_id_fkey FOREIGN KEY (sale_id)
+        REFERENCES sales (sale_id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION
 );
-COMMENT ON TABLE ventas_detalle IS 'Detalle de las ventas realizadas a los clientes';
-COMMENT ON COLUMN ventas_detalle.id_venta IS 'Identificador único de la venta';
-COMMENT ON COLUMN ventas_detalle.id_producto IS 'Identificador único del producto que se ha vendido';
-COMMENT ON COLUMN ventas_detalle.renglon IS 'Número de renglon de la venta';
-COMMENT ON COLUMN ventas_detalle.cantidad IS 'Cantidad del producto que se ha vendido';
-COMMENT ON COLUMN ventas_detalle.precio IS 'Precio al que se vendio el producto';
-COMMENT ON COLUMN ventas_detalle.total IS 'Total de monto por la venta de la cantidad especificada del producto';
+COMMENT ON TABLE sales_detail IS 'Detalle de las ventas realizadas a los clientes';
+COMMENT ON COLUMN sales_detail.sale_id IS 'Identificador único de la venta';
+COMMENT ON COLUMN sales_detail.product_id IS 'Identificador único del producto que se ha vendido';
+COMMENT ON COLUMN sales_detail.item IS 'Número de renglon de la venta';
+COMMENT ON COLUMN sales_detail.quantity IS 'Cantidad del producto que se ha vendido';
+COMMENT ON COLUMN sales_detail.price IS 'Precio al que se vendio el producto';
+COMMENT ON COLUMN sales_detail.total IS 'Total de monto por la venta de la cantidad especificada del producto';
