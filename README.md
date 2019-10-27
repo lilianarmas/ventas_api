@@ -7,7 +7,7 @@ _API con propósitos de DESARROLLO que gestiona CRUD de Clientes, Productos, Ent
 _Creación de Base de Datos PostgreSQL_
 
 ```
-/bd/ventas.sql
+/db/sales.sql
 ```
 
 _Configuración de Archivo de Conexión_
@@ -18,7 +18,7 @@ _Configuración de Archivo de Conexión_
 const connectionString = {
     host: 'localhost',
     port: 5432,
-    database: 'ventas',
+    database: 'sales',
     user: 'postgres',
     password: 'XXXXXX'
 };
