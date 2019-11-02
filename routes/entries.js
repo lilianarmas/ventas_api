@@ -31,8 +31,8 @@ class Entries
     * Obtener todos los entradas de un producto
     **/
     getProductEntries(req, res, next) {
-        let idProduct = parseInt(req.params.idProduct);
-        db.connection.any('select entry_id, product_id, quantity, TO_CHAR(date,\'DD/MM/YYYY\') date from entries where product_id = $1 order by entry_id', idProduct)
+        let productId = parseInt(req.params.productId);
+        db.connection.any('select entry_id, product_id, quantity, TO_CHAR(date,\'DD/MM/YYYY\') date from entries where product_id = $1 order by entry_id', productId)
         .then(data => {
             res.status(200)
             .json({
@@ -50,8 +50,8 @@ class Entries
     * Obtener un entrada por su id
     **/
     getEntry(req, res, next) {
-        let idEntry = parseInt(req.params.idEntry);
-        db.connection.one('select * from entries where entry_id = $1', idEntry)
+        let entryId = parseInt(req.params.entryId);
+        db.connection.one('select * from entries where entry_id = $1', entryId)
             .then(data => {
                 res.status(200)
                 .json({
@@ -86,8 +86,8 @@ class Entries
     * Eliminar un entrada por su id
     **/
     deleteEntry(req, res, next) {
-        let idEntry = parseInt(req.params.idEntry);
-        db.connection.result('delete from entries where entry_id = $1', idEntry)
+        let entryId = parseInt(req.params.entryId);
+        db.connection.result('delete from entries where entry_id = $1', entryId)
             .then(result => {
                 res.status(200)
                 .json({

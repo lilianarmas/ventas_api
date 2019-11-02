@@ -13,7 +13,7 @@ class Sales
     * Obtener todas las ventas
     **/
     getSales(req, res, next) {
-        db.connection.any('select sale_id, clients.client_id, clients.name, TO_CHAR(date,\'DD/MM/YYYY\') date, total_general from sales inner join clientes on (clients.client_id = sales.client_id) order by sale_id')
+        db.connection.any('select sale_id, clients.client_id, clients.name, TO_CHAR(date,\'DD/MM/YYYY\') date, total from sales inner join clients on (clients.client_id = sales.client_id) order by sale_id')
         .then(data => {
             res.status(200)
             .json({
@@ -31,8 +31,8 @@ class Sales
     * Obtener todas las compras de un cliente
     **/
     getClientSales(req, res, next) {
-        let idClient = parseInt(req.params.idClient);
-        db.connection.any('select sale_id, clients.client_id, clients.name, TO_CHAR(date,\'DD/MM/YYYY\') date, total_general from sales inner join clientes on (clients.client_id = sales.client_id) where sales.client_id = $1 order by sale_id', idClient)
+        let clientId = parseInt(req.params.clientId);
+        db.connection.any('select sale_id, clients.client_id, clients.name, TO_CHAR(date,\'DD/MM/YYYY\') date, total from sales inner join clients on (clients.client_id = sales.client_id) where sales.client_id = $1 order by sale_id', clientId)
         .then(data => {
             res.status(200)
             .json({

@@ -13,8 +13,8 @@ class SalesDetail
     * Obtener todos los detalles de una venta
     **/
     getSaleDetail(req, res, next) {
-        let idSale = parseInt(req.params.idSale);
-        db.connection.any('select sale_id, sales_detail.product_id, descripcion, item, quantity, sales_detail.price, total from sales_detail inner join productos on (sales_detail.product_id = productos.product_id) where sale_id = $1 order by item', idSale)
+        let saleId = parseInt(req.params.saleId);
+        db.connection.any('select sale_id, sales_detail.product_id, description, item, sales_detail.quantity, sales_detail.price, total from sales_detail inner join products on (sales_detail.product_id = products.product_id) where sale_id = $1 order by item', saleId)
             .then(data => {
                 res.status(200)
                 .json({
@@ -50,9 +50,9 @@ class SalesDetail
     * Eliminar un detalle de venta por su id
     **/
     deleteSaleDetail(req, res, next) {
-        let idSale = parseInt(req.params.idSale);
+        let saleId = parseInt(req.params.saleId);
         let idProduct = parseInt(req.params.idProduct);
-        db.connection.result('delete from sales_detail where sale_id = $1 and product_id = $2', [idSale, idProduct])
+        db.connection.result('delete from sales_detail where sale_id = $1 and product_id = $2', [saleId, idProduct])
         .then(result => {
             res.status(200)
             .json({

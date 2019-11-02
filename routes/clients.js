@@ -49,8 +49,8 @@ class Clients
     * Obtener un cliente por su id
     **/
     getClient(req, res, next) {
-        let idClient = parseInt(req.params.idClient);
-        db.connection.one('select * from clients where client_id = $1', idClient)
+        let clientId = parseInt(req.params.clientId);
+        db.connection.one('select * from clients where client_id = $1', clientId)
         .then(data => {
             res.status(200)
             .json({
@@ -85,9 +85,9 @@ class Clients
     * Actualizar un cliente por su id
     **/
     updateClient(req, res, next) {
-        let idClient = parseInt(req.params.idClient);
+        let clientId = parseInt(req.params.clientId);
         db.connection.none('update clients set name=$1 where client_id=$2',
-        [req.body.name,idClient])
+        [req.body.name,clientId])
         .then(() => {
             res.status(200)
             .json({
@@ -104,8 +104,8 @@ class Clients
     * Eliminar un cliente por su id
     **/
     deleteClient(req, res, next) {
-        let idClient = parseInt(req.params.idClient);
-        db.connection.result('delete from clients where client_id = $1', idClient)
+        let clientId = parseInt(req.params.clientId);
+        db.connection.result('delete from clients where client_id = $1', clientId)
         .then(result => {
             res.status(200)
             .json({
